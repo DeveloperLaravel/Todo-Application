@@ -11,7 +11,13 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final Box todoBox = Hive.box('todoBox');
   List<String> todoList = [];
-  final TextEditingController _controller = TextEditingController();
+
+  // Normal of Method
+  //  1- final TextEditingController _controller = TextEditingController();
+
+  // Dependency of Method
+  //  2- final TextEditingController _controller = TextEditingController();
+  late final TextEditingController _controller;
   int updateIndex = -1;
 
   @override
