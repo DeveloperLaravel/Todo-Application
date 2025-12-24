@@ -1,19 +1,11 @@
-abstract class TodoEvent {}
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class LoadTodos extends TodoEvent {}
+part 'todo_event.freezed.dart';
 
-class AddTodo extends TodoEvent {
-  final String task;
-  AddTodo(this.task);
-}
-
-class UpdateTodo extends TodoEvent {
-  final int index;
-  final String task;
-  UpdateTodo(this.index, this.task);
-}
-
-class DeleteTodo extends TodoEvent {
-  final int index;
-  DeleteTodo(this.index);
+@freezed
+class TodoEvent with _$TodoEvent {
+  const factory TodoEvent.loadTodos() = LoadTodos;
+  const factory TodoEvent.addTodo(String task) = AddTodo;
+  const factory TodoEvent.updateTodo(int index, String task) = UpdateTodo;
+  const factory TodoEvent.deleteTodo(int index) = DeleteTodo;
 }

@@ -1,39 +1,36 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-// ignore: depend_on_referenced_packages
-import 'package:hive/hive.dart';
+import 'package:injectable/injectable.dart';
+import '../../data/todo_repository.dart';
+import '../data/todo_repository.dart';
 import 'todo_event.dart';
 import 'todo_state.dart';
 
+@injectable
 class TodoBloc extends Bloc<TodoEvent, TodoState> {
-  final Box todoBox;
+  final TodoRepository repository;
 
-  TodoBloc(this.todoBox) : super(TodoInitial()) {
-    on<LoadTodos>((event, emit) {
-      final data = todoBox.get('todos', defaultValue: []);
-      emit(TodoLoaded(List<String>.from(data)));
+  TodoBloc(this.repository) : super(const TodoState.initial()) {
+    on<LoadTodos>((event, emit) async {
+      final todos = await repository.loadTodos();
+      emit(TodoState.loaded(todos));
     });
 
-    on<AddTodo>((event, emit) {
-      final current = state is TodoLoaded
-          ? List<String>.from((state as TodoLoaded).todos)
-          : [];
-      current.add(event.task);
-      todoBox.put('todos', current);
-      emit(TodoLoaded(List<String>.from(current)));
+    on<AddTodo>((event, emit) async {
+      await repository.addTodo(event.task);
+      final todos = await repository.loadTodos();
+      emit(TodoState.loaded(todos));
     });
 
-    on<UpdateTodo>((event, emit) {
-      final current = List<String>.from((state as TodoLoaded).todos);
-      current[event.index] = event.task;
-      todoBox.put('todos', current);
-      emit(TodoLoaded(current));
+    on<UpdateTodo>((event, emit) async {
+      await repository.updateTodo(event.index, event.task);
+      final todos = await repository.loadTodos();
+      emit(TodoState.loaded(todos));
     });
 
-    on<DeleteTodo>((event, emit) {
-      final current = List<String>.from((state as TodoLoaded).todos);
-      current.removeAt(event.index);
-      todoBox.put('todos', current);
-      emit(TodoLoaded(current));
+    on<DeleteTodo>((event, emit) async {
+      await repository.deleteTodo(event.index);
+      final todos = await repository.loadTodos();
+      emit(TodoState.loaded(todos));
     });
   }
 }

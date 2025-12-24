@@ -1,8 +1,9 @@
-abstract class TodoState {}
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class TodoInitial extends TodoState {}
+part 'todo_state.freezed.dart';
 
-class TodoLoaded extends TodoState {
-  final List<String> todos;
-  TodoLoaded(this.todos);
+@freezed
+class TodoState with _$TodoState {
+  const factory TodoState.initial() = _Initial;
+  const factory TodoState.loaded(List<String> todos) = _Loaded;
 }
