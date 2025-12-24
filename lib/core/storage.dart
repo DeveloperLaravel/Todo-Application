@@ -1,16 +1,16 @@
-import 'package:hive/hive.dart';
-import '../models/auth_user.dart';
+// import 'package:hive/hive.dart';
+// import '../home/models/auth_user.dart';
 
-class AuthStorage {
-  final Box<AuthUser> box;
-  AuthStorage(this.box);
+// class AuthStorage {
+//   final Box<AuthUser> box;
+//   AuthStorage(this.box);
 
-  AuthUser? get user => box.isNotEmpty ? box.getAt(0) : null;
+//   AuthUser? get user => box.isNotEmpty ? box.getAt(0) : null;
 
-  Future<void> save(AuthUser user) async {
-    await box.clear();
-    await box.add(user);
-  }
+//   Future<void> save(AuthUser user) async {
+//     await box.clear();
+//     await box.add(user);
+//   }
 
-  Future<void> clear() async => await box.clear();
-}
+//   Future<void> clear() async => await box.clear();
+// }
