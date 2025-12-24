@@ -1,0 +1,10 @@
+{
+    "configurations": [
+        {
+            "name": "gas_station (Flutter)",
+            "program": "lib/main.dart",
+            "request": "launch",
+            "type": "dart"
+        }
+    ]
+}
