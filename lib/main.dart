@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'injection.dart';
-import 'package:get_it/get_it.dart';
 
 import 'screens/bloc/todo_bloc.dart';
+import 'screens/bloc/todo_event.dart';
 import 'screens/todo_screen.dart';
 
 void main() async {

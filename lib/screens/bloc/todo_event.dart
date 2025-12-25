@@ -8,4 +8,6 @@ class TodoEvent with _$TodoEvent {
   const factory TodoEvent.addTodo(String task) = AddTodo;
   const factory TodoEvent.updateTodo(int index, String task) = UpdateTodo;
   const factory TodoEvent.deleteTodo(int index) = DeleteTodo;
+
+  const factory TodoEvent.startEdit(int index) = StartEdit;
 }

@@ -1,36 +1,43 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import '../../data/todo_repository.dart';
-import '../data/todo_repository.dart';
 import 'todo_event.dart';
 import 'todo_state.dart';
 
 @injectable
 class TodoBloc extends Bloc<TodoEvent, TodoState> {
-  final TodoRepository repository;
+  final TodoRepository repo;
 
-  TodoBloc(this.repository) : super(const TodoState.initial()) {
-    on<LoadTodos>((event, emit) async {
-      final todos = await repository.loadTodos();
-      emit(TodoState.loaded(todos));
-    });
+  TodoBloc(this.repo) : super(const TodoState()) {
+    on<TodoEvent>((event, emit) async {
+      await event.when(
+        loadTodos: () async {
+          emit(state.copyWith(todos: await repo.loadTodos()));
+        },
 
-    on<AddTodo>((event, emit) async {
-      await repository.addTodo(event.task);
-      final todos = await repository.loadTodos();
-      emit(TodoState.loaded(todos));
-    });
+        addTodo: (task) async {
+          final updated = [...state.todos, task];
+          await repo.saveTodos(updated);
+          emit(state.copyWith(todos: updated));
+        },
 
-    on<UpdateTodo>((event, emit) async {
-      await repository.updateTodo(event.index, event.task);
-      final todos = await repository.loadTodos();
-      emit(TodoState.loaded(todos));
-    });
+        updateTodo: (index, task) async {
+          final updated = [...state.todos];
+          updated[index] = task;
+          await repo.saveTodos(updated);
+          emit(state.copyWith(todos: updated, editingIndex: null));
+        },
 
-    on<DeleteTodo>((event, emit) async {
-      await repository.deleteTodo(event.index);
-      final todos = await repository.loadTodos();
-      emit(TodoState.loaded(todos));
+        deleteTodo: (index) async {
+          final updated = [...state.todos]..removeAt(index);
+          await repo.saveTodos(updated);
+          emit(state.copyWith(todos: updated));
+        },
+
+        startEdit: (index) async {
+          emit(state.copyWith(editingIndex: index));
+        },
+      );
     });
   }
 }

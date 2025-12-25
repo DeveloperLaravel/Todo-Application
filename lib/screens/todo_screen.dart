@@ -13,7 +13,7 @@ class TodoScreen extends StatelessWidget {
         backgroundColor: Colors.green,
       ),
       body: Column(
-        children: const [
+        children: [
           Expanded(child: TodoList()),
           TodoInput(),
         ],

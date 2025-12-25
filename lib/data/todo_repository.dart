@@ -3,13 +3,11 @@ import 'todo_local_data_source.dart';
 
 @lazySingleton
 class TodoRepository {
-  final TodoLocalDataSource localDataSource;
+  final TodoLocalDataSource local;
 
-  TodoRepository(this.localDataSource);
+  TodoRepository(this.local);
 
-  Future<List<String>> loadTodos() => localDataSource.getTodos();
-  Future<void> addTodo(String task) => localDataSource.addTodo(task);
-  Future<void> updateTodo(int index, String task) =>
-      localDataSource.updateTodo(index, task);
-  Future<void> deleteTodo(int index) => localDataSource.deleteTodo(index);
+  Future<List<String>> loadTodos() => local.getTodos();
+
+  Future<void> saveTodos(List<String> todos) => local.saveTodos(todos);
 }
